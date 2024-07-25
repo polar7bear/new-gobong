@@ -3,15 +3,16 @@ package com.sns.gobong.domain.entity;
 import com.sns.gobong.domain.status.VisibilityStatus;
 import com.sns.gobong.util.BaseTimeEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Entity
 @Table(name = "gobong_user")
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
@@ -42,9 +43,8 @@ public class User extends BaseTimeEntity {
     private String tel;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "visibility_status")
+    @Column(name = "visibility_status")
     private VisibilityStatus visibility;
-
 
 
 }
