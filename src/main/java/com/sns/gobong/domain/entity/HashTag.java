@@ -20,6 +20,6 @@ public class HashTag {
     @Column(length = 5)
     private String tag;
 
-    @ManyToMany(mappedBy = "hash_tags")
+    @ManyToMany(mappedBy = "hashTags")
     private Set<Board> boards = new HashSet<>();
 }
