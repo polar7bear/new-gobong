@@ -26,3 +26,6 @@ logging:
     org.hibernate.type: trace
 
 
+jwt:
+  secret: ${jwt.secret}
+  token-validity-time: ${jwt.token-validity-time}
