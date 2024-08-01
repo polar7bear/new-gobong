@@ -1,6 +1,5 @@
 package com.sns.gobong.config.security.jwt;
 
-import com.sns.gobong.config.security.CustomUserDetails;
 import com.sns.gobong.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -18,7 +17,6 @@ import org.springframework.util.StringUtils;
 
 import java.nio.ByteBuffer;
 import java.security.Key;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 
@@ -31,11 +29,16 @@ public class TokenProvider implements InitializingBean {
     private final CustomUserDetailsService userDetailsService;
     private Key key;
 
+    private final String issuer;
+
     public TokenProvider(@Value("${jwt.secret}") String secret,
-                         @Value("${jwt.token-validity-time}") long tokenValidityTime, CustomUserDetailsService userDetailsService) {
+                         @Value("${jwt.token-validity-time}") long tokenValidityTime,
+                         CustomUserDetailsService userDetailsService,
+                         @Value("${jwt.issuer}") String issuer) {
         this.secret = secret;
         this.tokenValidityTime = tokenValidityTime * 1000;
         this.userDetailsService = userDetailsService;
+        this.issuer = issuer;
     }
 
     @Override
@@ -47,15 +50,14 @@ public class TokenProvider implements InitializingBean {
     public String createAccessToken(Authentication authentication) {
         /*인증 객체를 가져와 사용자 정보를가져온다.
          * 시간 설정*/
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String authorities = authentication.getAuthorities().stream().findFirst().get().toString();
         long now = new Date().getTime();
         Date expiration = new Date(now + this.tokenValidityTime);
 
-        String encodedId = encodeId(userDetails.getId());
-
         return Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim("id", encodedId)
+                .setIssuer(issuer)
+                .claim("role", authorities)
                 .claim("type", "Access")
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(expiration)
@@ -63,40 +65,47 @@ public class TokenProvider implements InitializingBean {
     }
 
     public String createRefreshAccessToken(Authentication authentication) {
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         long validityTime = 60480000;
         Date expiration = new Date(new Date().getTime() + validityTime);
-        String encodedId = encodeId(userDetails.getId());
+        String role = authentication.getAuthorities().stream().findFirst().get().toString();
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim("id", encodedId)
+                .setIssuer(issuer)
+                .claim("role", role)
                 .claim("type", "Refresh")
+                .setExpiration(expiration)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
     // 토큰으로 인증 객체 가져오기
     public Authentication getAuthentication(String token) {
-        Claims claims = (Claims) Jwts.parserBuilder()
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parse(token)
+                .parseClaimsJws(token)
                 .getBody();
         String email = claims.getSubject();
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        return new UsernamePasswordAuthenticationToken(userDetails, token, new ArrayList<>()); // user role
+        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities()); // user role
     }
 
     // 토큰 유효성 검증
     public boolean validationAccessToken(String token) {
         try {
-            Claims claims = (Claims) Jwts.parserBuilder()
+            Claims claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parse(token)
+                    .parseClaimsJws(token)
                     .getBody();
             String tokenType = claims.get("type", String.class);
+            String targetIssuer = claims.getIssuer();
+            String targetSubject = claims.getSubject();
+            Authentication authentication = getAuthentication(token);
+
+            if (!targetIssuer.equals(issuer)) return false;
+            if (!targetSubject.equals(authentication.getName())) return false;
 
             return !tokenType.equals("Refresh");
 
