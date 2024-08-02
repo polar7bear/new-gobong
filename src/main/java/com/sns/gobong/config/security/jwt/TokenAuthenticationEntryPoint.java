@@ -1,16 +1,15 @@
 package com.sns.gobong.config.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sns.gobong.util.api.ApiError;
+import com.sns.gobong.util.api.ErrorType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
@@ -21,11 +20,9 @@ public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setHeader("Content-Type", "application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("message", "Unauthorized");
-        errorDetails.put("status", HttpStatus.UNAUTHORIZED);        // TODO: API 유틸 클래스 만들고 리팩토링 하기
-
-        response.getWriter().write(objectMapper.writeValueAsString(errorDetails));
+        response.getWriter().write(objectMapper.writeValueAsString(
+                new ApiError(ErrorType.UNAUTHORIZED, "401", "접근할 수 없는 권한입니다.")
+        ));
         response.getWriter().flush();
         response.getWriter().close();
     }
