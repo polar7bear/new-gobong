@@ -9,7 +9,7 @@ public class ApiResponse<T> {
     private String message;
     private ApiError apiError;
     private T data;
-    private String ms = "";
+    private String cost = "";
 
     private boolean checkedContext() {
         return ResponseContext.requestAt.get() != null;
@@ -17,8 +17,8 @@ public class ApiResponse<T> {
 
     private void calculateCost() {
         if (checkedContext()) {
-            long cost = System.currentTimeMillis() - ResponseContext.requestAt.get();
-            this.ms = cost + " ms";
+            long time = System.currentTimeMillis() - ResponseContext.requestAt.get();
+            this.cost = time + " ms";
         }
     }
 
