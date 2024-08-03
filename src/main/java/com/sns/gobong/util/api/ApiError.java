@@ -1,9 +1,11 @@
 package com.sns.gobong.util.api;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class ApiError {
 
     private ErrorType errorType;
@@ -21,6 +23,14 @@ public class ApiError {
         this.errorType = errorType;
         this.code = code;
         this.message = message;
-        this.errorStack = e.getMessage();
+        this.errorStack = getStackTraceAsString(e);
+    }
+
+    private String getStackTraceAsString(Throwable e) {
+        StringBuilder sb = new StringBuilder();
+        for (StackTraceElement element : e.getStackTrace()) {
+            sb.append(element.toString()).append("\n");
+        }
+        return sb.toString();
     }
 }
