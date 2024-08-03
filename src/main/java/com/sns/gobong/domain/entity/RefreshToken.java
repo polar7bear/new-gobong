@@ -1,9 +1,7 @@
 package com.sns.gobong.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "gobong_refresh_token")
@@ -21,4 +19,9 @@ public class RefreshToken {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public RefreshToken(String refreshToken, User user) {
+        this.refreshToken = refreshToken;
+        this.user = user;
+    }
 }
