@@ -1,10 +1,7 @@
 package com.sns.gobong.domain.entity;
 
 import com.sns.gobong.util.BaseTimeEntity;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,8 +19,8 @@ public class Reply extends BaseTimeEntity {
     private Long id;
 
 
-    @NotNull
-    @Min(value = 2, message = "최소 2글자 이상 입력해주세요.")
+    //@NotNull
+    //@Size(min = 2, message = "최소 2글자 이상 입력해주세요.")
     @Column(nullable = false)
     private String comment;
 

@@ -1,7 +1,6 @@
 package com.sns.gobong.domain.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import lombok.Getter;
 
 import java.util.HashSet;
@@ -16,7 +15,7 @@ public class HashTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Max(value = 5, message = "최대 5글자까지 입력 가능합니다.")
+    //@Size(max = 5, message = "최대 5글자까지 입력 가능합니다.")
     @Column(length = 5)
     private String tag;
 
