@@ -2,7 +2,6 @@ package com.sns.gobong.domain.entity;
 
 import com.sns.gobong.util.BaseTimeEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +21,8 @@ public class Board extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Max(value = 200, message = "200자이내로 작성해주세요.")
+    //@Size(max = 200, message = "200자이내로 작성해주세요.")
+    @Column(length = 200)
     private String content;
 
     private Integer Views; // 조회수
