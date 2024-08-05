@@ -11,14 +11,16 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.nio.ByteBuffer;
 import java.security.Key;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -81,33 +83,41 @@ public class TokenProvider implements InitializingBean {
 
     // 토큰으로 인증 객체 가져오기
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parserBuilder()
+        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(getRole(token)));
+        return new UsernamePasswordAuthenticationToken(getUsername(token), null, authorities);
+    }
+
+    public String getUsername(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    public String getRole(String token) {
+        return getClaims(token).get("role", String.class);
+    }
+
+    public String getTokenType(String token) {
+        return getClaims(token).get("type", String.class);
+    }
+
+    public String getIssuer(String token) {
+        return getClaims(token).getIssuer();
+    }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        String email = claims.getSubject();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities()); // user role
     }
 
     // 토큰 유효성 검증
     public boolean validationAccessToken(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-            String tokenType = claims.get("type", String.class);
-            String targetIssuer = claims.getIssuer();
-            String targetSubject = claims.getSubject();
-            Authentication authentication = getAuthentication(token);
+            String tokenType = commonValidation(token);
+            if (tokenType == null) return false;
 
-            if (!targetIssuer.equals(issuer)) return false;
-            if (!targetSubject.equals(authentication.getName())) return false;
-
-            return !tokenType.equals("Refresh");
+            return tokenType.equals("Access");
 
         } catch (SecurityException | MalformedJwtException e) {
             throw new MalformedJwtException(e.getMessage());
@@ -116,6 +126,33 @@ public class TokenProvider implements InitializingBean {
         } catch (UnsupportedJwtException e) {
             throw new UnsupportedJwtException(e.getMessage());
         }
+    }
+
+    public boolean validationRefreshToken(String token) {
+        try {
+            String tokenType = commonValidation(token);
+            if (tokenType == null) return false;
+
+            return tokenType.equals("Refresh");
+
+        } catch (SecurityException | MalformedJwtException e) {
+            throw new MalformedJwtException(e.getMessage());
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            throw new UnsupportedJwtException(e.getMessage());
+        }
+    }
+
+    private String commonValidation(String token) {
+        String tokenType = getTokenType(token);
+        String targetIssuer = getIssuer(token);
+        String targetSubject = getUsername(token);
+        Authentication authentication = getAuthentication(token);
+
+        if (!targetIssuer.equals(issuer)) return null;
+        if (!targetSubject.equals(authentication.getName())) return null;
+        return tokenType;
     }
 
     // 토큰 유효시간 가져오기
