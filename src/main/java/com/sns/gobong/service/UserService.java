@@ -1,8 +1,8 @@
 package com.sns.gobong.service;
 
 import com.sns.gobong.config.security.jwt.TokenProvider;
-import com.sns.gobong.domain.dto.request.SignInUserRequestDto;
-import com.sns.gobong.domain.dto.request.SignUpUserRequestDto;
+import com.sns.gobong.domain.dto.request.UserSignInRequestDto;
+import com.sns.gobong.domain.dto.request.UserSignUpRequestDto;
 import com.sns.gobong.domain.dto.response.UserSignInResponseDto;
 import com.sns.gobong.domain.dto.response.UserSignUpResponseDto;
 import com.sns.gobong.domain.entity.User;
@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,14 +30,14 @@ public class UserService {
     private final RefreshTokenService refreshTokenService;
 
     @Transactional
-    public UserSignUpResponseDto signUp(SignUpUserRequestDto userDto) {
+    public UserSignUpResponseDto signUp(UserSignUpRequestDto userDto) {
         userRepository.findByEmail(userDto.getEmail())
                 .ifPresent(existUser -> {
                     throw new UserAlreadyExistsException("이미 존재하는 회원입니다.");
                 });
         String encoded = passwordEncoder.encode(userDto.getPw());
         userDto.setPw(encoded);
-        User user = SignUpUserRequestDto.from(userDto);
+        User user = UserSignUpRequestDto.from(userDto);
         userRepository.save(user);
 
         return UserSignUpResponseDto.builder()
@@ -48,7 +49,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserSignInResponseDto signIn(SignInUserRequestDto userDto) {
+    public UserSignInResponseDto signIn(UserSignInRequestDto userDto) {
         User user = userRepository.findByEmail(userDto.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("존재 하지않는 이메일입니다."));
 
@@ -59,6 +60,8 @@ public class UserService {
         String accessToken = tokenProvider.createAccessToken(authentication);
         String refreshToken = tokenProvider.createRefreshAccessToken(authentication);
 
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         refreshTokenService.saveRefreshToken(user, refreshToken);
 
         return UserSignInResponseDto.builder()
@@ -68,4 +71,5 @@ public class UserService {
                 .refreshToken(refreshToken)
                 .build();
     }
+
 }
