@@ -1,6 +1,6 @@
 package com.sns.gobong.domain.status;
 
 public enum Role {
-    USER,
-    ADMIN
+    ROLE_USER,
+    ROLE_ADMIN
 }
