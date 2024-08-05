@@ -12,6 +12,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -23,8 +25,16 @@ public class JwtFilter extends OncePerRequestFilter {
         this.tokenProvider = tokenProvider;
     }
 
+    private final static List<String> EXCLUDE_URLS = Arrays.asList("/users/sign-up", "/users/sign-in");
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String path = request.getRequestURI();
+        if (EXCLUDE_URLS.contains(path)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String token = tokenProvider.resolveToken(request);
 
         if (StringUtils.hasText(token) && tokenProvider.validationAccessToken(token)) {
