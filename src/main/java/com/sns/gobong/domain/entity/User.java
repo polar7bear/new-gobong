@@ -49,10 +49,10 @@ public class User extends BaseTimeEntity {
     private VisibilityStatus visibility;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role = Role.ROLE_USER;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
     }
 
 }
