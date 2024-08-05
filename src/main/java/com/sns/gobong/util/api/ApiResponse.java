@@ -27,6 +27,12 @@ public class ApiResponse<T> {
         calculateCost();
     }
 
+    public ApiResponse(String message) {
+        this.success = true;
+        this.message = message;
+        calculateCost();
+    }
+
     public ApiResponse(String message, T data) {
         this.success = true;
         this.message = message;
