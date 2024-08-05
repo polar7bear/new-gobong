@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class SignInUserRequestDto {
+public class UserSignInRequestDto {
 
     @Email(message = "이메일 형식을 지켜주세요.")
     @NotBlank(message = "필수 입력란입니다.")

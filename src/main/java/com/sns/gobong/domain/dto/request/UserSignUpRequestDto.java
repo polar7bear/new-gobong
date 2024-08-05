@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SignUpUserRequestDto {
+public class UserSignUpRequestDto {
 
 
     @NotBlank
@@ -36,7 +36,7 @@ public class SignUpUserRequestDto {
 
     private VisibilityStatus visibility;
 
-    public static User from(SignUpUserRequestDto dto) {
+    public static User from(UserSignUpRequestDto dto) {
         return User.builder()
                 .nickname(dto.getNickname())
                 .email(dto.getEmail())
@@ -44,7 +44,7 @@ public class SignUpUserRequestDto {
                 .tel(dto.getTel())
                 .img(dto.getImg())
                 .visibility(dto.getVisibility())
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
     }
 }
