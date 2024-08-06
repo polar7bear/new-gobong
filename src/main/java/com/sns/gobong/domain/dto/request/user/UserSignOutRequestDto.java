@@ -1,4 +1,4 @@
-package com.sns.gobong.domain.dto.request;
+package com.sns.gobong.domain.dto.request.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

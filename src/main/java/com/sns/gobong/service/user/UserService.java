@@ -1,10 +1,10 @@
-package com.sns.gobong.service;
+package com.sns.gobong.service.user;
 
 import com.sns.gobong.config.security.jwt.TokenProvider;
-import com.sns.gobong.domain.dto.request.UserSignInRequestDto;
-import com.sns.gobong.domain.dto.request.UserSignUpRequestDto;
-import com.sns.gobong.domain.dto.response.UserSignInResponseDto;
-import com.sns.gobong.domain.dto.response.UserSignUpResponseDto;
+import com.sns.gobong.domain.dto.request.user.UserSignInRequestDto;
+import com.sns.gobong.domain.dto.request.user.UserSignUpRequestDto;
+import com.sns.gobong.domain.dto.response.user.UserSignInResponseDto;
+import com.sns.gobong.domain.dto.response.user.UserSignUpResponseDto;
 import com.sns.gobong.domain.entity.User;
 import com.sns.gobong.exception.user.UserAlreadyExistsException;
 import com.sns.gobong.exception.user.WrongPasswordException;

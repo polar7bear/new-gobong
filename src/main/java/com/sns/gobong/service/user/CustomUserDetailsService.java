@@ -1,4 +1,4 @@
-package com.sns.gobong.service;
+package com.sns.gobong.service.user;
 
 import com.sns.gobong.config.security.CustomUserDetails;
 import com.sns.gobong.domain.entity.User;

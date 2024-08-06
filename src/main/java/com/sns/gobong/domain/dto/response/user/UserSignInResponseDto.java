@@ -1,4 +1,4 @@
-package com.sns.gobong.domain.dto.response;
+package com.sns.gobong.domain.dto.response.user;
 
 import lombok.Builder;
 import lombok.Getter;

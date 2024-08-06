@@ -1,7 +1,7 @@
-package com.sns.gobong.service;
+package com.sns.gobong.service.user;
 
 import com.sns.gobong.config.security.jwt.TokenProvider;
-import com.sns.gobong.domain.dto.request.UserSignOutRequestDto;
+import com.sns.gobong.domain.dto.request.user.UserSignOutRequestDto;
 import com.sns.gobong.domain.entity.RefreshToken;
 import com.sns.gobong.domain.entity.User;
 import com.sns.gobong.exception.user.InvalidRefreshTokenException;

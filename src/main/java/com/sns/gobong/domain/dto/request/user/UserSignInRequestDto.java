@@ -1,4 +1,4 @@
-package com.sns.gobong.domain.dto.request;
+package com.sns.gobong.domain.dto.request.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

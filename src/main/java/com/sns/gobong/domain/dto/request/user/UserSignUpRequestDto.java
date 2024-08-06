@@ -1,4 +1,4 @@
-package com.sns.gobong.domain.dto.request;
+package com.sns.gobong.domain.dto.request.user;
 
 import com.sns.gobong.domain.entity.User;
 import com.sns.gobong.domain.status.Role;

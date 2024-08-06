@@ -1,12 +1,12 @@
-package com.sns.gobong.controller;
+package com.sns.gobong.controller.user;
 
-import com.sns.gobong.domain.dto.request.UserSignInRequestDto;
-import com.sns.gobong.domain.dto.request.UserSignOutRequestDto;
-import com.sns.gobong.domain.dto.request.UserSignUpRequestDto;
-import com.sns.gobong.domain.dto.response.UserSignInResponseDto;
-import com.sns.gobong.domain.dto.response.UserSignUpResponseDto;
-import com.sns.gobong.service.RefreshTokenService;
-import com.sns.gobong.service.UserService;
+import com.sns.gobong.domain.dto.request.user.UserSignInRequestDto;
+import com.sns.gobong.domain.dto.request.user.UserSignOutRequestDto;
+import com.sns.gobong.domain.dto.request.user.UserSignUpRequestDto;
+import com.sns.gobong.domain.dto.response.user.UserSignInResponseDto;
+import com.sns.gobong.domain.dto.response.user.UserSignUpResponseDto;
+import com.sns.gobong.service.user.RefreshTokenService;
+import com.sns.gobong.service.user.UserService;
 import com.sns.gobong.util.api.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
