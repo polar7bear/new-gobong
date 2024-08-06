@@ -1,6 +1,6 @@
 package com.sns.gobong.config.security.jwt;
 
-import com.sns.gobong.service.CustomUserDetailsService;
+import com.sns.gobong.service.user.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
