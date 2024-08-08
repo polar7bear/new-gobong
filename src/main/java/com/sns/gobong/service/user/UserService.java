@@ -58,7 +58,7 @@ public class UserService {
         }
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null, user.getAuthorities());
         String accessToken = tokenProvider.createAccessToken(authentication);
-        String refreshToken = tokenProvider.createRefreshAccessToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

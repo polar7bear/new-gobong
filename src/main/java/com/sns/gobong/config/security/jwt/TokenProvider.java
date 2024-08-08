@@ -66,7 +66,7 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-    public String createRefreshAccessToken(Authentication authentication) {
+    public String createRefreshToken(Authentication authentication) {
         long validityTime = 60480000;
         Date expiration = new Date(new Date().getTime() + validityTime);
         String role = authentication.getAuthorities().stream().findFirst().get().toString();
