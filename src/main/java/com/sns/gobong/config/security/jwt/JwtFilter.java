@@ -25,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
         this.tokenProvider = tokenProvider;
     }
 
-    private final static List<String> EXCLUDE_URLS = Arrays.asList("/users/sign-up", "/users/sign-in");
+    private final static List<String> EXCLUDE_URLS = Arrays.asList("/users/sign-up", "/users/sign-in", "/oauth/login/register");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
