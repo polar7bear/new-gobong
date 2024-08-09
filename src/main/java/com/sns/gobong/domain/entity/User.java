@@ -23,19 +23,12 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@NotBlank
-    //@Size(min = 2, max = 8, message = "2글자 이상, 8글자 이하로 입력해주세요.")
-    @Column(length = 8, unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String nickname;
 
-    //@Email(message = "이메일 형식을 지켜주세요.")
-    //@NotBlank(message = "필수 입력란입니다.")
-    //@Size(max = 30, message = "30자이내로 입력해주세요.")
-    @Column(length = 30, unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    //@NotBlank(message = "필수 입력란입니다.")
-    @Column(nullable = false)
     private String pw;
 
     private String img; // TODO: AWS S3
