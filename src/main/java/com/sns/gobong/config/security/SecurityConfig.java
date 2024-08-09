@@ -1,4 +1,4 @@
-package com.sns.gobong.config;
+package com.sns.gobong.config.security;
 
 import com.sns.gobong.config.security.jwt.JwtFilter;
 import com.sns.gobong.config.security.jwt.TokenAccessDeniedHandler;
@@ -43,7 +43,7 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/sign-up", "/users/sign-in", "/", "oauth/login/**").permitAll()
+                        .requestMatchers("/users/sign-up", "/users/sign-in", "/oauth/login/register").permitAll()
                         .requestMatchers("/users/sign-out").hasRole("USER")
                         .anyRequest().authenticated()
                 )
