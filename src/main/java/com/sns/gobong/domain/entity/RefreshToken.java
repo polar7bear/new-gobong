@@ -13,7 +13,7 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "refresh_token")
+    @Column(nullable = false, name = "refresh_token", length = 512)
     private String refreshToken;
 
     @OneToOne(fetch = FetchType.LAZY)
