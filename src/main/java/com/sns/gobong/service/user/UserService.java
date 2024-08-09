@@ -1,8 +1,10 @@
 package com.sns.gobong.service.user;
 
 import com.sns.gobong.config.security.jwt.TokenProvider;
+import com.sns.gobong.domain.dto.request.oauth.UserOAuthRegisterRequestDto;
 import com.sns.gobong.domain.dto.request.user.UserSignInRequestDto;
 import com.sns.gobong.domain.dto.request.user.UserSignUpRequestDto;
+import com.sns.gobong.domain.dto.response.oauth.UserOAuthResponseDto;
 import com.sns.gobong.domain.dto.response.user.UserSignInResponseDto;
 import com.sns.gobong.domain.dto.response.user.UserSignUpResponseDto;
 import com.sns.gobong.domain.entity.User;
@@ -40,12 +42,21 @@ public class UserService {
         User user = UserSignUpRequestDto.from(userDto);
         userRepository.save(user);
 
-        return UserSignUpResponseDto.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .createdAt(user.getCreatedAt())
-                .build();
+        return UserSignUpResponseDto.of(user);
+    }
+
+    @Transactional
+    public UserOAuthResponseDto oauthUserRegister(UserOAuthRegisterRequestDto dto) {
+        User user = UserOAuthRegisterRequestDto.from(dto);
+        userRepository.save(user); // 회원 유무 존재는 핸들러에서 체크함
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null, user.getAuthorities());
+        String accessToken = tokenProvider.createAccessToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
+
+        refreshTokenService.saveRefreshToken(user, refreshToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return UserOAuthResponseDto.of(user, accessToken, refreshToken);
     }
 
     @Transactional
