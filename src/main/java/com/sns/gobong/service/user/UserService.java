@@ -33,6 +33,7 @@ public class UserService {
 
     @Transactional
     public UserSignUpResponseDto signUp(UserSignUpRequestDto userDto) {
+        // TODO: 전화번호 인증 구현
         userRepository.findByEmail(userDto.getEmail())
                 .ifPresent(existUser -> {
                     throw new UserAlreadyExistsException("이미 존재하는 회원입니다.");
@@ -47,6 +48,7 @@ public class UserService {
 
     @Transactional
     public UserOAuthResponseDto oauthUserRegister(UserOAuthRegisterRequestDto dto) {
+        // TODO: 전화번호 인증 구현
         User user = UserOAuthRegisterRequestDto.from(dto);
         userRepository.save(user); // 회원 유무 존재는 핸들러에서 체크함
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null, user.getAuthorities());
