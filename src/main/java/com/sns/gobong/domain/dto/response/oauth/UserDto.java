@@ -9,4 +9,5 @@ public class UserDto {
     private String nickname;
     private String email;
     private String role;
+    private String provider;
 }

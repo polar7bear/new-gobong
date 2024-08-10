@@ -6,14 +6,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
 public class CustomOAuth2User implements OAuth2User {
 
     private final UserDto userDto;
-
 
 
     @Override
@@ -41,5 +39,9 @@ public class CustomOAuth2User implements OAuth2User {
 
     public String getEmail() {
         return userDto.getEmail();
+    }
+
+    public String getProvider() {
+        return userDto.getProvider();
     }
 }

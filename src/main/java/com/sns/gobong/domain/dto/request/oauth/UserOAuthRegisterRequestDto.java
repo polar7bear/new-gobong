@@ -1,13 +1,10 @@
 package com.sns.gobong.domain.dto.request.oauth;
 
-import com.sns.gobong.domain.dto.request.user.UserSignUpRequestDto;
 import com.sns.gobong.domain.entity.User;
 import com.sns.gobong.domain.status.Role;
 import com.sns.gobong.domain.status.VisibilityStatus;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +27,8 @@ public class UserOAuthRegisterRequestDto {
 
     private VisibilityStatus visibility;
 
+    private String provider;
+
     public static User from(UserOAuthRegisterRequestDto dto) {
         return User.builder()
                 .nickname(dto.getNickname())
@@ -38,6 +37,7 @@ public class UserOAuthRegisterRequestDto {
                 .img(dto.getImg())
                 .visibility(dto.getVisibility())
                 .role(Role.ROLE_USER)
+                .provider(dto.getProvider())
                 .build();
     }
 }
