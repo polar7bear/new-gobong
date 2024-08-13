@@ -53,6 +53,9 @@ dependencies {
 	// oauth
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+	// CoolSMS
+	implementation 'net.nurigo:sdk:4.3.0'
+
 
 
 
