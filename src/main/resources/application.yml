@@ -52,6 +52,7 @@ spring:
             client-authentication-method: client_secret_post
             scope:
               - profile_nickname
+              - account_email
 
 
         provider:
@@ -66,6 +67,23 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
+message:
+  api-key: ${message.api-key}
+  api-secret-key: ${message.api-secret-key}
+  sender: ${message.sender}
+#  mail:
+#    host: smtp.gmail.com
+#    port: 465
+#    username: ${mail.username}
+#    password: ${mail.password}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          timeout: 5000
+#          starttls:
+#            enable: true
 
 
 logging:
