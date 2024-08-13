@@ -29,7 +29,8 @@ public class KakaoResponse implements OAuth2Response {
 
     @Override
     public String getEmail() {
-        return Optional.ofNullable(attributes.get(EMAIL)) // 이메일 추출 로직 추가
+        return Optional.ofNullable(attributes.get("kakao_account"))
+                .map(props -> ((Map<?, ?>) props).get(EMAIL))
                 .map(Object::toString)
                 .orElse("");
     }
