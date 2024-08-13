@@ -26,10 +26,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2Response oAuth2Response = whichProvider(oAuth2User, registerationId);
 
-        String email = oAuth2Response.getProvider() + "_" + oAuth2Response.getProviderId();
+        //String email = oAuth2Response.getProvider() + "_" + oAuth2Response.getProviderId();
 
         UserDto userDto = UserDto.builder()
-                .email(email)
+                .email(oAuth2Response.getEmail())
                 .nickname(oAuth2Response.getName())
                 .role("ROLE_USER")
                 .provider(oAuth2Response.getProvider())
