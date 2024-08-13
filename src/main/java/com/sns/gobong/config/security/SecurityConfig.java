@@ -43,7 +43,7 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/sign-up", "/users/sign-in", "/oauth/login/register").permitAll()
+                        .requestMatchers("/users/sign-up", "/users/sign-in", "/oauth/login/register", "/message").permitAll()
                         .requestMatchers("/users/sign-out").hasRole("USER")
                         .anyRequest().authenticated()
                 )
